@@ -102,6 +102,10 @@ initForm.addEventListener('submit', (e) => {
 // 1. Setup media sources
 
 webcamButton.onclick = async () => {
+    callButton.disabled = false;
+    answerButton.disabled = false;
+    webcamButton.disabled = true;
+
     try {
 
         localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
@@ -128,9 +132,6 @@ webcamButton.onclick = async () => {
 
     webcamVideo.srcObject = localStream;
 
-    callButton.disabled = false;
-    answerButton.disabled = false;
-    webcamButton.disabled = true;
 };
 
 // 2. Create an offer
