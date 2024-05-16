@@ -3,7 +3,18 @@ import './style.css';
 import "firebase/firestore";
 
 import {initializeApp} from "firebase/app";
-import {getFirestore, collection, doc, addDoc, updateDoc, getDoc, setDoc, getDocs, deleteDoc, onSnapshot} from "firebase/firestore";
+import {
+    getFirestore,
+    collection,
+    doc,
+    addDoc,
+    updateDoc,
+    getDoc,
+    setDoc,
+    getDocs,
+    deleteDoc,
+    onSnapshot
+} from "firebase/firestore";
 
 function jsSnippetToJson(jsSnippet) {
     const noComments = jsSnippet.replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, '');
@@ -91,18 +102,23 @@ initForm.addEventListener('submit', (e) => {
 // 1. Setup media sources
 
 webcamButton.onclick = async () => {
-    localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
-    remoteStream = new MediaStream();
-    const chatChannel = pc.createDataChannel('chat');
-    chatChannel.onmessage = (event) => {
-        console.log('Received Message:', event.data);
-    };
-    chatChannel.onopen = () => {
-        console.log('Chat Channel Opened!');
-    };
-    chatChannel.onclose = () => {
-        console.log('Chat Channel Closed!');
-    };
+    try {
+
+        localStream = await navigator.mediaDevices.getUserMedia({video: true, audio: true});
+        remoteStream = new MediaStream();
+        const chatChannel = pc.createDataChannel('chat');
+        chatChannel.onmessage = (event) => {
+            console.log('Received Message:', event.data);
+        };
+        chatChannel.onopen = () => {
+            console.log('Chat Channel Opened!');
+        };
+        chatChannel.onclose = () => {
+            console.log('Chat Channel Closed!');
+        };
+    } catch (e) {
+        console.error('Error accessing media devices.', e);
+    }
 
     // Push tracks from local stream to peer connection
     localStream.getTracks().forEach((track) => {
