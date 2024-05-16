@@ -1,12 +1,15 @@
 {
   "name": "Firebase webRTC",
+  "homepage": "https://lurco.github.io/firebaseRTC/,",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "deploy": "vite build && gh-pages -d build"
   },
   "devDependencies": {
+    "gh-pages": "^6.1.1",
     "vite": "^5.2"
   },
   "dependencies": {
