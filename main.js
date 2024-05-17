@@ -15,6 +15,7 @@ import {
     deleteDoc,
     onSnapshot
 } from "firebase/firestore";
+import * as url from "node:url";
 
 function jsSnippetToJson(jsSnippet) {
     const noComments = jsSnippet.replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, '');
@@ -34,6 +35,7 @@ let remoteStream = null;
 
 const urlParams = new URLSearchParams(window.location.search);
 const fconfig = urlParams.get('fconfig');
+const sconfig = urlParams.get('sconfig');
 
 function initializeFirebase() {
     app = initializeApp(firebaseConfig);
@@ -45,6 +47,12 @@ if (fconfig) {
     initializeFirebase();
 } else {
     console.log('No Firebase config found in URL, put it in fconfig query parameter.');
+}
+
+if (sconfig) {
+    servers = jsSnippetToJson(sconfig);
+} else {
+    console.log('No WebRTC config found in URL, put it in sconfig query parameter.');
 }
 
 
@@ -95,7 +103,7 @@ const initForm = document.getElementById('init-form');
 
 initForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    servers = jsSnippetToJson(e.target.elements['peer-connection-config'].value);
+    // servers = jsSnippetToJson(e.target.elements['peer-connection-config'].value);
     createPc();
 });
 
