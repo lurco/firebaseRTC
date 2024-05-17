@@ -49,17 +49,19 @@ if (fconfig) {
     console.log('No Firebase config found in URL, put it in fconfig query parameter.');
 }
 
-if (sconfig) {
-    servers = jsSnippetToJson(sconfig);
-} else {
-    console.log('No WebRTC config found in URL, put it in sconfig query parameter.');
+if (!sconfig) {
+    console.log('No TURN server config found in URL, put it in sconfig query parameter.');
 }
 
 
 // Global State
-function createPc() {
-    const pc = new RTCPeerConnection(servers);
+async function createPc() {
+    const response = await fetch(`https://starship_stargard.metered.live/api/v1/turn/credentials?apiKey=${sconfig}`);
+    const iceServers = await response.json();
+    const pc = new RTCPeerConnection({iceServers});
+
     window.pc = pc;
+
     pc.ontrack = (event) => {
         event.streams[0].getTracks().forEach((track) => {
             remoteStream.addTrack(track);
@@ -101,10 +103,10 @@ const serversInput = document.getElementById('peer-connection-config');
 const initForm = document.getElementById('init-form');
 
 
-initForm.addEventListener('submit', (e) => {
+initForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     // servers = jsSnippetToJson(e.target.elements['peer-connection-config'].value);
-    createPc();
+    await createPc();
 });
 
 // 1. Setup media sources
